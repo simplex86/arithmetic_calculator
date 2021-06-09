@@ -1,8 +1,8 @@
 --[[
-
+	计算器
 --]]
-local tokenizer = require("core.tokenizer")
-local syntax = require("core.syntax")
+local lexer = require("core.lexer")
+local parser = require("core.parser")
 
 -- 打印tokens列表
 local function _print_tokens_(tokens)
@@ -23,9 +23,9 @@ local function _evaluation_(tree)
 end
 
 local function _calc_(exp)
-	local tokens = tokenizer.scan(exp)
+	local tokens = lexer.solve(exp)
 	_print_tokens_(tokens)
-	local tree = syntax.solve(tokens)
+	local tree = parser.solve(tokens)
 	_print_tree_(tree)
 
 	return _evaluation_(tree)

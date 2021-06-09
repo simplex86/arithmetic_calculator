@@ -1,7 +1,7 @@
 --[[
-    分词器
+    词法分析
 ]]
-local const = require("core.const")
+require("core.const")
 
 -- 创建token
 local function _create_token_(type, value)
@@ -14,7 +14,7 @@ local function _create_token_(type, value)
 end
 
 -- 扫描表达式，分词构建token列表
-local function _scan_(exp)
+local function _solve_(exp)
 	local tokens = {}
 	
 	local spt = 1
@@ -61,5 +61,5 @@ local function _scan_(exp)
 end
 
 return {
-    scan = _scan_,
+    solve = _solve_,
 }

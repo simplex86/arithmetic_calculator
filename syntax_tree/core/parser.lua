@@ -1,7 +1,7 @@
 --[[
-	语法树
+	语法分析
 ]]
-local const = require("core.const")
+require("core.const")
 
 -- 构建节点
 local function _create_node_()
