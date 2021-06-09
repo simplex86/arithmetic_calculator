@@ -3,16 +3,20 @@
 --]]
 local calc = require("calc")
 
+local expressions = {
+	"1+2",
+	"4-3-2",
+	"4-(3-2)",
+	"4-(3-2)*5",
+}
+
 local function main()
-	local value = calc.get("1+2-3*4/5")
-	-- print("-------")
-	-- local value = calc.get("(1+2)*3")
-	-- print("-------")
-	-- local value = calc.get("(1+2)*(3-4)")
-	-- print("-------")
-	-- local value = calc.get("(1+2)*(3-4)/5.6")
-	-- print("-------")
-	-- local value = calc.get("7+(1+2)*(3-4)/5.6")
+	for _, exp in pairs(expressions) do
+		print("solve " .. exp)
+		local value = calc.solve(exp)
+		print("result " .. value)
+		print("")
+	end
 end
 
 main()

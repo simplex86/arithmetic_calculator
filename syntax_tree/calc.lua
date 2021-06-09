@@ -13,19 +13,29 @@ local operations = {
 }
 
 -- 获取语法树的值
-local function _evaluation_(ast)
+local function _evaluation_(node)
+	if node.type == token_type.number then
+		node.value = tonumber(node.value)
+	else
+		local L = _evaluation_(node.lchild)
+		local R = _evaluation_(node.rchild)
+		local F = operations[node.type]
+		node.value = F(L.value, R.value)
+	end
 
+	return node
 end
 
-local function _calc_(exp)
+local function _solve_(exp)
 	local tokens = lexer.solve(exp)
 	lexer.print(tokens)
 	local ast = parser.solve(tokens)
 	parser.print(ast)
 
-	return _evaluation_(ast)
+	local result = _evaluation_(ast)
+	return result.value
 end
 
 return {
-	get = _calc_,
+	solve = _solve_,
 }
