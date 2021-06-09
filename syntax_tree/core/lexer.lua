@@ -3,6 +3,15 @@
 ]]
 require("core.const")
 
+local _char_2_type_map_ = {
+	["+"] = token_type.add,
+	["-"] = token_type.sub,
+	["*"] = token_type.mul,
+	["/"] = token_type.div,
+	["("] = token_type.parenthese_left,
+	[")"] = token_type.parenthese_right,
+}
+
 -- 创建token
 local function _create_token_(type, value)
 	local token = {
@@ -17,11 +26,12 @@ end
 local function _solve_(exp)
 	local tokens = {}
 	
-	local spt = 1
-	local ept = 1
+	local head = 1
+	local tail = 1
+	local lens = #exp
 	
-	while ept <= #exp do		
-		local c = string.sub(exp, ept, ept)
+	while tail <= lens do		
+		local c = string.sub(exp, tail, tail)
 		if c == "+" or
 		   c == "-" or
 		   c == "*" or
@@ -29,37 +39,41 @@ local function _solve_(exp)
 		   c == "(" or
 		   c == ")"
 		then
-			if ept > spt then
-				local v = string.sub(exp, spt, ept-1)
+			if tail > head then
+				local v = string.sub(exp, head, tail-1)
 				local t = _create_token_(token_type.number, v)
 				table.insert(tokens, t)
 			end
 			
-			local type = token_type.operator
-			if c == "(" then
-				type = token_type.parenthese_left
-			elseif c == ")" then
-				type = token_type.parenthese_right
-			end
+			local type = _char_2_type_map_[c]
+			local token = _create_token_(type, c)
+			table.insert(tokens, token)
 
-			local t = _create_token_(type, c)
-			table.insert(tokens, t)
-
-			spt = ept + 1
+			head = tail + 1
 		end
 		
-		ept = ept + 1
+		tail = tail + 1
 	end
 
-	if ept > spt then
-		local v = string.sub(exp, spt, ept-1)
+	if tail > head then
+		local v = string.sub(exp, head, tail-1)
 		local t = _create_token_(token_type.number, v)
 		table.insert(tokens, t)
 	end
+
+	table.insert(tokens, _create_token_(token_type.ending, "="))
 	
 	return tokens
 end
 
+local function _print_(tokens)
+	print("lexer output:")
+	for k, v in pairs(tokens) do
+		print(string.format("%s: \t%s\t%s", k, v.value, v.type))
+	end
+end
+
 return {
     solve = _solve_,
+	print = _print_,
 }

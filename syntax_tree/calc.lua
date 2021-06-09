@@ -1,34 +1,29 @@
 --[[
 	计算器
 --]]
+require("core.const")
 local lexer = require("core.lexer")
 local parser = require("core.parser")
 
--- 打印tokens列表
-local function _print_tokens_(tokens)
-	print("syntax stack:")
-	for k, v in pairs(tokens) do
-		print(string.format("%s: \t%s\t%s", k, v.value, v.type))
-	end
-end
-
--- 打印tokens列表
-local function _print_tree_(tree)
-
-end
+local operations = {
+	[token_type.add] = function(a, b) return a + b end,
+	[token_type.sub] = function(a, b) return a - b end,
+	[token_type.mul] = function(a, b) return a * b end,
+	[token_type.div] = function(a, b) return a / b end,
+}
 
 -- 获取语法树的值
-local function _evaluation_(tree)
+local function _evaluation_(ast)
 
 end
 
 local function _calc_(exp)
 	local tokens = lexer.solve(exp)
-	_print_tokens_(tokens)
-	local tree = parser.solve(tokens)
-	_print_tree_(tree)
+	lexer.print(tokens)
+	local ast = parser.solve(tokens)
+	parser.print(ast)
 
-	return _evaluation_(tree)
+	return _evaluation_(ast)
 end
 
 return {

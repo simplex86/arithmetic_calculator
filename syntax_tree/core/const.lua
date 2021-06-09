@@ -4,9 +4,12 @@
 
 -- 节点类型
 token_type = {
-	none			 = 0, -- 空
-	number 	 		 = 1, -- 数字
-	operator 		 = 2, -- 操作符
-	parenthese_left  = 4, -- 左括号
-	parenthese_right = 5, -- 右括号
+	number 	 		 	= 1, -- 数字
+	add 		 		= 2, -- 加
+	sub					= 3, -- 减
+	mul					= 4, -- 乘
+	div					= 5, -- 除
+	parenthese_left  	= 6, -- 左括号
+	parenthese_right 	= 7, -- 右括号
+	ending				= 8, -- 结尾
 }
