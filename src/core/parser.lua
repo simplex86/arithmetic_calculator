@@ -15,6 +15,7 @@ local function _create_node_(lchild, rchild, type, value)
 	return node
 end
 
+-- 比较token类型是否是指定的类型
 local function _match_token_type_(tokens, index, type)
 	if tokens[index.value].type ~= type then
 		error("parser error: ")
@@ -107,43 +108,29 @@ local _type_2_char_map_ = {
 	[token_type.sub] 				= "-",
 	[token_type.mul] 				= "*",
 	[token_type.div] 				= "/",
-	[token_type.parenthese_left] 	= "(",
-	[token_type.parenthese_right] 	= ")",
 }
 
-local function _get_depth_(node)
-	return 8
-end
-
-local function _format_node_(node, level)
-	if node.type == token_type.ending or
-	   node.type == token_type.parenthese_right
-	then
-		return ""
-	end
-
-	if node.type == token_type.parenthese_left then
-		_format_node_(node.lchild, level)
-		_format_node_(node.rchild, level)
-		return ""
-	end
+-- 把树格式化为字符串
+local function _format_node_(node, depth)
+	local text = ""
 
 	if node.type == token_type.number then
-		print(string.rep("\t", level) .. node.value)
-		return
+		text = string.rep("   ", depth) .. node.value .. "\n"
+		return text
 	end
 
-	print(string.rep("\t", level) .. _type_2_char_map_[node.type])
+	text = text .. string.rep("   ", depth) .. _type_2_char_map_[node.type] .. "\n"
 
-	_format_node_(node.lchild, level-1)
-	_format_node_(node.rchild, level+1)
+	text = text .. _format_node_(node.lchild, depth + 1)
+	text = text .. _format_node_(node.rchild, depth + 1)
+
+	return text
 end
 
+-- 打印
 local function _print_(node)
-	print("parser output:")
-
-	local level = _get_depth_(node)
-	_format_node_(node, level)
+	local text = _format_node_(node, 0)
+	print("parser output:\n" .. text)
 end
 
 return {
