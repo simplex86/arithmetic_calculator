@@ -23,11 +23,13 @@ local function _match_token_type_(tokens, index, type)
 	index.value = index.value + 1
 end
 
-local _atomic_exp_ 	= nil
+local _number_exp_ 	= nil
+local _pow_exp_ 	= nil
 local _mul_exp_		= nil
 local _add_exp_ 	= nil
 
-_atomic_exp_ = function(tokens, index)
+-- 数字表达式
+_number_exp_ = function(tokens, index)
 	local node = nil
 
 	local token = tokens[index.value]
@@ -45,8 +47,14 @@ _atomic_exp_ = function(tokens, index)
 	return node
 end
 
+-- 幂表达式
+_pow_exp_ = function(tokens, index)
+
+end
+
+-- 乘除表达式
 _mul_exp_ = function(tokens, index)
-	local node = _atomic_exp_(tokens, index)
+	local node = _number_exp_(tokens, index)
 	
 	while tokens[index.value].type == token_type.mul or 
 	      tokens[index.value].type == token_type.div 
@@ -55,7 +63,7 @@ _mul_exp_ = function(tokens, index)
 
 		local T = tokens[index.value - 1].type
 		local L = node
-		local R = _atomic_exp_(tokens, index)
+		local R = _number_exp_(tokens, index)
 
 		node = _create_node_(L, R, T)
 	end
@@ -63,6 +71,7 @@ _mul_exp_ = function(tokens, index)
 	return node
 end
 
+-- 加减表达式
 _add_exp_ = function(tokens, index)
 	local node = _mul_exp_(tokens, index)
 
@@ -93,8 +102,48 @@ local function _solve_(tokens)
 	return ast
 end
 
-local function _print_(ast)
+local _type_2_char_map_ = {
+	[token_type.add] 				= "+",
+	[token_type.sub] 				= "-",
+	[token_type.mul] 				= "*",
+	[token_type.div] 				= "/",
+	[token_type.parenthese_left] 	= "(",
+	[token_type.parenthese_right] 	= ")",
+}
+
+local function _get_depth_(node)
+	return 8
+end
+
+local function _format_node_(node, level)
+	if node.type == token_type.ending or
+	   node.type == token_type.parenthese_right
+	then
+		return ""
+	end
+
+	if node.type == token_type.parenthese_left then
+		_format_node_(node.lchild, level)
+		_format_node_(node.rchild, level)
+		return ""
+	end
+
+	if node.type == token_type.number then
+		print(string.rep("\t", level) .. node.value)
+		return
+	end
+
+	print(string.rep("\t", level) .. _type_2_char_map_[node.type])
+
+	_format_node_(node.lchild, level-1)
+	_format_node_(node.rchild, level+1)
+end
+
+local function _print_(node)
 	print("parser output:")
+
+	local level = _get_depth_(node)
+	_format_node_(node, level)
 end
 
 return {

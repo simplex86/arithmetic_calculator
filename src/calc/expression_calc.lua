@@ -1,9 +1,9 @@
 --[[
 	计算器
 --]]
-require("core.const")
-local lexer = require("core.lexer")
-local parser = require("core.parser")
+require("..core.const")
+local lexer = require("..core.lexer")
+local parser = require("..core.parser")
 
 local operations = {
 	[token_type.add] = function(a, b) return a + b end,
@@ -26,11 +26,14 @@ local function _evaluation_(node)
 	return node
 end
 
-local function _solve_(exp)
+local function _solve_(exp, debug)
 	local tokens = lexer.solve(exp)
-	lexer.print(tokens)
 	local ast = parser.solve(tokens)
-	parser.print(ast)
+
+	if debug then
+		lexer.print(tokens)
+		parser.print(ast)
+	end
 
 	local result = _evaluation_(ast)
 	return result.value
