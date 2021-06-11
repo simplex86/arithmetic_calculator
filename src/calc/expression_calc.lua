@@ -1,5 +1,5 @@
 --[[
-	计算表达式的值
+	表达式计算器
 --]]
 require("..core.const")
 local lexer = require("..core.lexer")
