@@ -12,12 +12,6 @@ local _char_2_type_map_ = {
 	[")"] = token_type.parenthese_right,
 }
 
--- 预处理表达式
--- 例如，去掉空格
-local function _preprocess_(exp)
-	return exp
-end
-
 -- 创建token
 local function _create_token_(type, value)
 	local token = {
@@ -31,7 +25,6 @@ end
 -- 扫描表达式，分词构建token列表
 local function _solve_(exp)
 	local tokens = {}
-	exp = _preprocess_(exp)
 	
 	local head = 1
 	local tail = 1

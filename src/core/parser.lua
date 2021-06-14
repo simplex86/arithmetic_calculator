@@ -42,7 +42,7 @@ _number_exp_ = function(tokens, index)
 		node = _create_node_(nil, nil, token.type, token.value)
 		index.value = index.value + 1
 	else
-		error("parser error: ")
+		error("parser error")
 	end
 
 	return node

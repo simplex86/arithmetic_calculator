@@ -15,7 +15,7 @@ local operations = {
 -- 获取语法树的值
 local function _evaluation_(node)
 	if node.type == token_type.number then
-		node.value = tonumber(node.value)
+	    node.value = tonumber(node.value)
 	else
 		local L = _evaluation_(node.lchild)
 		local R = _evaluation_(node.rchild)

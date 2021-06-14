@@ -5,6 +5,7 @@ require("..util.string")
 require("..core.const")
 local exp_calc = require("calc.expression_calc")
 
+-- 把公式格式化成表达式
 local function _formula_to_expression_(formula, vars)
     local exp = formula
     for k, v in pairs(vars) do
