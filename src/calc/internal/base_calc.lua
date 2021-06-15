@@ -1,9 +1,7 @@
 --[[
-	表达式计算器
---]]
-require("..core.const")
-local lexer = require("..core.lexer")
-local parser = require("..core.parser")
+
+]]
+require("....core.const")
 
 local operations = {
 	[token_type.add] = function(a, b) return a + b end,
@@ -27,21 +25,6 @@ local function _evaluation_(node)
 	return node
 end
 
--- 解析表达式，并返回结果值
--- debug：是否输出解析过程中的数据（词法栈和语法树）
-local function _solve_(exp, debug)
-	local tokens = lexer.solve(exp)
-	local ast = parser.solve(tokens)
-
-	if debug then
-		lexer.print(tokens)
-		parser.print(ast)
-	end
-
-	local result = _evaluation_(ast)
-	return result.value
-end
-
 return {
-	solve = _solve_,
+    evaluation = _evaluation_,
 }

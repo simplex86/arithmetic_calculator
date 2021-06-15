@@ -116,10 +116,11 @@ local function _solve_(tokens)
 end
 
 local _type_2_char_map_ = {
-	[token_type.add] 				= "+",
-	[token_type.sub] 				= "-",
-	[token_type.mul] 				= "*",
-	[token_type.div] 				= "/",
+	[token_type.add] = "+",
+	[token_type.sub] = "-",
+	[token_type.mul] = "*",
+	[token_type.div] = "/",
+	[token_type.pow] = "^",
 }
 
 -- 把树格式化为字符串

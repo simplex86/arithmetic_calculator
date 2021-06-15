@@ -1,42 +1,46 @@
 --[[
 
 --]]
-local exp_calc = require("calc.expression_calc")
-local fml_calc = require("calc.formula_calc")
+local engine = require("calc.engine")
+local debug = false
 
-local _debug_ = false
+local exps = {
+	{exp = "1+2+3"},
+	{exp = "4-3-2"},
+	{exp = "4-(3-2)"},
+	{exp = "4-(3-2)*5"},
+	{exp = "(6+4)*2+(4-(3-2)*5)/7"},
+	{exp = "1+2^3+4"},
+	{exp = "(1+2)^3+4"},
+	{exp = "a+(b-c)", vars = {a=1, b=2, c=3}},
+}
 
-local function _exp_calc_(exp)
-	local value = exp_calc.solve(exp, _debug_)
-	print(exp .. "=" .. value)
-end
-
-local function _fml_calc_(formula, vars)
-	local value = fml_calc.solve(formula, vars, _debug_)
-	local vtext = ""
-	for k, v in pairs(vars) do
-		if vtext ~= "" then
-			vtext = vtext .. ","
+local function _format_(exp, vars, res)
+	local text = exp .. "=" .. res
+	if vars ~= nil then
+		text = text .. " { "
+		for k, v in pairs(vars) do
+			text = text .. k .. "=" .. v .. " "
 		end
-		vtext = vtext .. k .. "=" .. v
+		text = text .. "}"
 	end
-	print(formula .. "=" .. value .. " {" .. vtext .. "}")
+
+	return text
 end
-
-
 
 local function main()
-	local expc = _exp_calc_
-	expc("1+2+3")
-	expc("4-3-2")
-	expc("4-(3-2)")
-	expc("4-(3-2)*5")
-	expc("(6+4)*2+(4-(3-2)*5)/7")
-	expc("1+2^3+4")
-	expc("(1+2)^3+4")
+	for _, v in pairs(exps) do
+		local exp = v.exp
+		local vars = v.vars
+		print("----------------------------------------------")
+		print(exp)
+		print("----------------------------------------------")
+		local res = engine.calc(exp, vars, debug)
 
-	local fmlc = _fml_calc_
-	fmlc("a+(b-c)", {a=1, b=2, c=3})
+		local text = _format_(exp, vars, res)
+		print("calc output: " .. text)
+		print("")
+	end
 end
 
 main()
