@@ -50,12 +50,24 @@ end
 
 -- 幂表达式
 _pow_exp_ = function(tokens, index)
+	local node = _number_exp_(tokens, index)
+	
+	while tokens[index.value].type == token_type.pow do
+		index.value = index.value + 1
 
+		local T = tokens[index.value - 1].type
+		local L = node
+		local R = _number_exp_(tokens, index)
+
+		node = _create_node_(L, R, T)
+	end
+
+	return node
 end
 
 -- 乘除表达式
 _mul_exp_ = function(tokens, index)
-	local node = _number_exp_(tokens, index)
+	local node = _pow_exp_(tokens, index)
 	
 	while tokens[index.value].type == token_type.mul or 
 	      tokens[index.value].type == token_type.div 
@@ -64,7 +76,7 @@ _mul_exp_ = function(tokens, index)
 
 		local T = tokens[index.value - 1].type
 		local L = node
-		local R = _number_exp_(tokens, index)
+		local R = _pow_exp_(tokens, index)
 
 		node = _create_node_(L, R, T)
 	end

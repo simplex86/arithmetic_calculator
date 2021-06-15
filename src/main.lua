@@ -32,6 +32,8 @@ local function main()
 	expc("4-(3-2)")
 	expc("4-(3-2)*5")
 	expc("(6+4)*2+(4-(3-2)*5)/7")
+	expc("1+2^3+4")
+	expc("(1+2)^3+4")
 
 	local fmlc = _fml_calc_
 	fmlc("a+(b-c)", {a=1, b=2, c=3})

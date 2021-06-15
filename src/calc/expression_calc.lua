@@ -10,6 +10,7 @@ local operations = {
 	[token_type.sub] = function(a, b) return a - b end,
 	[token_type.mul] = function(a, b) return a * b end,
 	[token_type.div] = function(a, b) return a / b end,
+	[token_type.pow] = function(a, b) return math.pow(a, b) end,
 }
 
 -- 获取语法树的值

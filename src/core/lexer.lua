@@ -8,6 +8,7 @@ local _char_2_type_map_ = {
 	["-"] = token_type.sub,
 	["*"] = token_type.mul,
 	["/"] = token_type.div,
+	["^"] = token_type.pow,
 	["("] = token_type.parenthese_left,
 	[")"] = token_type.parenthese_right,
 }
@@ -36,6 +37,7 @@ local function _solve_(exp)
 		   c == "-" or
 		   c == "*" or
 		   c == "/" or
+		   c == "^" or
 		   c == "(" or
 		   c == ")"
 		then
